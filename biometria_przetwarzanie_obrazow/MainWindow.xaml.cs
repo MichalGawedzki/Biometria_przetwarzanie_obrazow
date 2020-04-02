@@ -177,6 +177,16 @@ namespace biometria_przetwarzanie_obrazow {
 			HistogramWindow histogramWindow = new HistogramWindow(img);
 			histogramWindow.Show();
 		}
+
+		private void separatedHistograms_Click(object sender, RoutedEventArgs e) {
+			HistogramWindow histogramWindow = new HistogramWindow(img);
+
+			histogramWindow.Show();
+		}
+
+		private void overallHistogram_Click(object sender, RoutedEventArgs e) {
+
+		}
 	}
 
 

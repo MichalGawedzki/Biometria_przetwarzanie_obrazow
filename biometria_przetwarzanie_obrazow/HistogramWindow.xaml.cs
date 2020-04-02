@@ -100,5 +100,9 @@ namespace biometria_przetwarzanie_obrazow {
 				}
 			}
 		}
+
+		public void separatedHistograms() {
+
+		}
 	}
 }

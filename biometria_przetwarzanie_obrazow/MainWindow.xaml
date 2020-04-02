@@ -31,8 +31,8 @@
                     <MenuItem x:Name="saveImageButton" Header="_Save" Click="saveImageButton_Click"/>
                 </MenuItem>
                 <MenuItem Header="Histogram">
-                    <MenuItem x:Name="makeRHistogramButton" Header="Red" Click="makeRHistogramButton_Click"/>
-                    <MenuItem x:Name="makeGHistogramButton" Header="Green" />
+                    <MenuItem x:Name="separatedHistograms" Header="R+G+B" Click="separatedHistograms_Click"/>
+                    <MenuItem x:Name="overallHistogram" Header="(R+G+B)3" Click="overallHistogram_Click"/>
                     <MenuItem x:Name="makeBHistogramButton" Header="Blue"/>
                 </MenuItem>
             </Menu>
