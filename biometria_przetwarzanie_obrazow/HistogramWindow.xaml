@@ -16,17 +16,39 @@
 
         <Grid.RowDefinitions>
             <RowDefinition Height="15"/>
+            <RowDefinition Height="30"/>
             <RowDefinition Height="*"/>
+            <RowDefinition Height="30"/>
             <RowDefinition Height="15"/>
         </Grid.RowDefinitions>
 
-        <lvc:CartesianChart Series="{Binding SeriesCollection}" LegendLocation="Right" Grid.Column="1" Grid.Row="1">
+        <StackPanel Grid.Column="1" Grid.Row="1" Orientation="Horizontal" VerticalAlignment="Center" Margin="10, 0">
+            <TextBlock Text="A: " FontSize="18"/>
+            <TextBox x:Name="stretchA" Width="50" Margin="5, 0" FontSize="18"/>
+            <TextBlock Text="B: " FontSize="18"/>
+            <TextBox x:Name="stretchB" Width="50" Margin="5, 0" FontSize="18"/>
+            <Button x:Name="stretchButton" Content="Stretch" Margin="10, 1" Width="60" Height="25" ToolTip="Stretch histogram to full 8-bit scale" Click="stretchButton_Click"></Button>
+            <Separator Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" Margin="10, 0"/>
+            <Button x:Name="lightenButton" Content="Lighten" Margin="10, 0" Width="60" Height="25" ToolTip="Lighten the image"></Button>
+            <Separator Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" Margin="10, 0"/>
+            <Button x:Name="darkenButton" Content="Darken" Margin="10, 0" Width="60" Height="25" ToolTip="Darken the image"></Button>
+            <Separator Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" Margin="10, 0"/>
+            <Button x:Name="evenButton" Content="Even" Margin="10, 0" Width="60" Height="25" ToolTip="Even the histogram"></Button>
+        </StackPanel>
+
+        <lvc:CartesianChart Series="{Binding SeriesCollection}" LegendLocation="Right" Grid.Column="1" Grid.Row="2" Margin="0, 5, 0, 0">
             <lvc:CartesianChart.AxisY>
-                <lvc:Axis Title="Sales" LabelFormatter="{Binding YFormatter}" MinValue="0"></lvc:Axis>
+                <lvc:Axis Title="Amount" LabelFormatter="{Binding YFormatter}" MinValue="0"></lvc:Axis>
             </lvc:CartesianChart.AxisY>
             <lvc:CartesianChart.AxisX>
-                <lvc:Axis Title="Month" Labels="{Binding Labels}"></lvc:Axis>
+                <lvc:Axis Title="Value" Labels="{Binding Labels}"></lvc:Axis>
             </lvc:CartesianChart.AxisX>
         </lvc:CartesianChart>
+
+        <StackPanel Grid.Column="1" Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Right">
+            <Button Content="Cancel" Margin="5, 0" Width="60" Height="25" ToolTip="Cancel all changes"></Button>
+            <Button Content="Apply" Margin="5, 0" Width="60" Height="25" ToolTip="Apply on editable image in previous window"></Button>
+
+        </StackPanel>
     </Grid>
 </Window>

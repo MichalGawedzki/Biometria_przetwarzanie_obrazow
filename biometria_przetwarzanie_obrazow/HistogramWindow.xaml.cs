@@ -29,10 +29,40 @@ namespace biometria_przetwarzanie_obrazow {
 		int[] r;
 		int[] g;
 		int[] b;
+		int[] rgb;
 
 		public HistogramWindow(Bitmap sourceImage) {
 			InitializeComponent();
+		}
 
+		public void fillRgbArrays(Bitmap bitmap) {
+
+			r = new int[256];
+			g = new int[256];
+			b = new int[256];
+			for (int i = 0; i < bitmap.Width; i++) {
+				for (int j = 0; j < bitmap.Height; j++) {
+					System.Drawing.Color color = bitmap.GetPixel(i, j);
+					r[color.R]++;
+					g[color.G]++;
+					b[color.B]++;
+				}
+			}
+		}
+
+		public void fillRgbArray(Bitmap bitmap) {
+			rgb = new int[256];
+			int sum;
+			for (int i = 0; i < bitmap.Width; i++) {
+				for (int j = 0; j < bitmap.Height; j++) {
+					System.Drawing.Color color = bitmap.GetPixel(i, j);
+					sum = (color.R + color.G + color.B) / 3;
+					rgb[sum]++;
+				}
+			}
+		}
+
+		public void separatedHistograms(Bitmap sourceImage) {
 			Bitmap img = sourceImage;
 
 			fillRgbArrays(img);
@@ -66,42 +96,34 @@ namespace biometria_przetwarzanie_obrazow {
 				stringList.Add(i.ToString());
 			}
 			Labels = stringList.ToArray();
-
-			//Labels = new[] {"Jan", "Feb", "Mar", "Apr", "May"};
 			YFormatter = value => value.ToString("C");
-
-			//modifying the series collection will animate and update the chart
-			//SeriesCollection.Add(new LineSeries {
-			//	Title = "Series 4",
-			//	Values = new ChartValues<double> { 5, 3, 2, 4 },
-			//	LineSmoothness = 0, //0: straight lines, 1: really smooth lines
-			//	PointGeometry = Geometry.Parse("m 25 70.36218 20 -28 -20 22 -8 -6 z"),
-			//	PointGeometrySize = 50,
-			//	PointForeground = System.Windows.Media.Brushes.Gray
-			//});
-
-			////modifying any series values will also animate and update the chart
-			//SeriesCollection[3].Values.Add(5d);
-
 			DataContext = this;
 		}
 
-		public void fillRgbArrays(Bitmap bitmap) {
+		public void overallHistogram(Bitmap sourceImage) {
+			Bitmap img = sourceImage;
 
-			r = new int[256];
-			g = new int[256];
-			b = new int[256];
-			for (int i = 0; i < bitmap.Width; i++) {
-				for (int j = 0; j < bitmap.Height; j++) {
-					System.Drawing.Color color = bitmap.GetPixel(i, j);
-					r[color.R]++;
-					g[color.G]++;
-					b[color.B]++;
+			fillRgbArray(img);
+
+			SeriesCollection = new SeriesCollection
+			{
+				new LineSeries
+				{
+					Title = "RGB histogram",
+					Values = new ChartValues<int> (rgb.ToArray()),
+					PointGeometry = null,
 				}
+			};
+			var stringList = new List<String>();
+			for (int i = 0; i < 256; i++) {
+				stringList.Add(i.ToString());
 			}
+			Labels = stringList.ToArray();
+			YFormatter = value => value.ToString("C");
+			DataContext = this;
 		}
 
-		public void separatedHistograms() {
+		private void stretchButton_Click(object sender, RoutedEventArgs e) {
 
 		}
 	}

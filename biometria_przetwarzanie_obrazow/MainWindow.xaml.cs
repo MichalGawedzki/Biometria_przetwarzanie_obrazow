@@ -180,12 +180,14 @@ namespace biometria_przetwarzanie_obrazow {
 
 		private void separatedHistograms_Click(object sender, RoutedEventArgs e) {
 			HistogramWindow histogramWindow = new HistogramWindow(img);
-
+			histogramWindow.separatedHistograms(img);
 			histogramWindow.Show();
 		}
 
 		private void overallHistogram_Click(object sender, RoutedEventArgs e) {
-
+			HistogramWindow histogramWindow = new HistogramWindow(img);
+			histogramWindow.overallHistogram(img);
+			histogramWindow.Show();
 		}
 	}
 

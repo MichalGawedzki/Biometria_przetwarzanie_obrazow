@@ -38,7 +38,6 @@
             </Menu>
         </DockPanel>
 
-
         <Border x:Name="borderOriginal" BorderBrush="Black" BorderThickness="1" Grid.Row="3" Grid.Column="1" Margin="10">
             <Image x:Name="originalImage" Margin="10"></Image>
         </Border>
