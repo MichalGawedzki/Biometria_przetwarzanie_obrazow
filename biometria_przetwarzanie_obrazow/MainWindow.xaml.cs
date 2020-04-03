@@ -29,7 +29,7 @@ namespace biometria_przetwarzanie_obrazow {
 		}
 
 		string filePath = string.Empty;
-		Bitmap img { get; set; }
+		public Bitmap img { get; set; }
 		private void loadImageButton_Click(object sender, RoutedEventArgs e) {
 			OpenFileDialog open = new OpenFileDialog();
 			open.Title = "Select a picture";
@@ -76,7 +76,7 @@ namespace biometria_przetwarzanie_obrazow {
 			return newBmp;
 		}
 
-		BitmapImage BitmapToImageSource(Bitmap bitmap) {
+		public static BitmapImage BitmapToImageSource(Bitmap bitmap) {
 			using (MemoryStream memory = new MemoryStream()) {
 				bitmap.Save(memory, System.Drawing.Imaging.ImageFormat.Bmp);
 				memory.Position = 0;
@@ -174,19 +174,19 @@ namespace biometria_przetwarzanie_obrazow {
 		}
 
 		private void makeRHistogramButton_Click(object sender, RoutedEventArgs e) {
-			HistogramWindow histogramWindow = new HistogramWindow(img);
+			HistogramWindow histogramWindow = new HistogramWindow(this);
 			histogramWindow.Show();
 		}
 
 		private void separatedHistograms_Click(object sender, RoutedEventArgs e) {
-			HistogramWindow histogramWindow = new HistogramWindow(img);
-			histogramWindow.separatedHistograms(img);
+			HistogramWindow histogramWindow = new HistogramWindow(this);
+			histogramWindow.separatedHistograms();
 			histogramWindow.Show();
 		}
 
 		private void overallHistogram_Click(object sender, RoutedEventArgs e) {
-			HistogramWindow histogramWindow = new HistogramWindow(img);
-			histogramWindow.overallHistogram(img);
+			HistogramWindow histogramWindow = new HistogramWindow(this);
+			histogramWindow.overallHistogram();
 			histogramWindow.Show();
 		}
 	}

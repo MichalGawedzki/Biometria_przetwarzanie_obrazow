@@ -33,7 +33,7 @@
             <Separator Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" Margin="10, 0"/>
             <Button x:Name="darkenButton" Content="Darken" Margin="10, 0" Width="60" Height="25" ToolTip="Darken the image"></Button>
             <Separator Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" Margin="10, 0"/>
-            <Button x:Name="evenButton" Content="Even" Margin="10, 0" Width="60" Height="25" ToolTip="Even the histogram"></Button>
+            <Button x:Name="equalizeButton" Content="Equalize" Margin="10, 0" Width="60" Height="25" ToolTip="Even the histogram" Click="equalizeButton_Click"></Button>
         </StackPanel>
 
         <lvc:CartesianChart Series="{Binding SeriesCollection}" LegendLocation="Right" Grid.Column="1" Grid.Row="2" Margin="0, 5, 0, 0">
