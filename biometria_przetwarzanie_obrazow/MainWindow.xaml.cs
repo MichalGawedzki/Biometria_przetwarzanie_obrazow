@@ -50,6 +50,8 @@ namespace biometria_przetwarzanie_obrazow {
 				bTextBox.Text = "0";
 				zoomSlider.Value = 5;
 
+				borderOriginal.BorderBrush = Brushes.Black;
+				borderOriginal.BorderThickness = new Thickness(1);
 			}
 		}
 
@@ -141,6 +143,22 @@ namespace biometria_przetwarzanie_obrazow {
 				xx = xx * img.Width / image.ActualWidth;
 				yy = yy * img.Height / image.ActualHeight;
 
+				if (String.IsNullOrEmpty(rTextBox.Text)) {
+					rTextBox.BorderBrush = Brushes.Red;
+					return;
+				}
+				else gTextBox.BorderBrush = Brushes.Black;
+				if (String.IsNullOrEmpty(gTextBox.Text)) {
+					gTextBox.BorderBrush = Brushes.Red;
+					return;
+				}
+				else bTextBox.BorderBrush = Brushes.Black;
+				if (String.IsNullOrEmpty(bTextBox.Text)) {
+					bTextBox.BorderBrush = Brushes.Red;
+					return;
+				}
+				else rTextBox.BorderBrush = Brushes.Black;
+
 				int r = int.Parse(rTextBox.Text);
 				int g = int.Parse(gTextBox.Text);
 				int b = int.Parse(bTextBox.Text);
@@ -179,14 +197,32 @@ namespace biometria_przetwarzanie_obrazow {
 		}
 
 		private void separatedHistograms_Click(object sender, RoutedEventArgs e) {
+			if (img == null) {
+				borderOriginal.BorderBrush = Brushes.Red;
+				borderOriginal.BorderThickness = new Thickness(2);
+				return;
+			}
+			else {
+				borderOriginal.BorderBrush = Brushes.Black;
+				borderOriginal.BorderThickness = new Thickness(1);
+			}
 			HistogramWindow histogramWindow = new HistogramWindow(this);
-			histogramWindow.separatedHistograms();
+			histogramWindow.firstSeparatedHistogram();
 			histogramWindow.Show();
 		}
 
 		private void overallHistogram_Click(object sender, RoutedEventArgs e) {
+			if (img == null) {
+				borderOriginal.BorderBrush = Brushes.Red;
+				borderOriginal.BorderThickness = new Thickness(2);
+				return;
+			}
+			else {
+				borderOriginal.BorderBrush = Brushes.Black;
+				borderOriginal.BorderThickness = new Thickness(1);
+			}
 			HistogramWindow histogramWindow = new HistogramWindow(this);
-			histogramWindow.overallHistogram();
+			histogramWindow.firstOverallHistogram();
 			histogramWindow.Show();
 		}
 	}

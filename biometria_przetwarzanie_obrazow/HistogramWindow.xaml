@@ -27,13 +27,13 @@
             <TextBox x:Name="stretchA" Width="50" Margin="5, 0" FontSize="18"/>
             <TextBlock Text="B: " FontSize="18"/>
             <TextBox x:Name="stretchB" Width="50" Margin="5, 0" FontSize="18"/>
-            <Button x:Name="stretchButton" Content="Stretch" Margin="10, 1" Width="60" Height="25" ToolTip="Stretch histogram to full 8-bit scale" Click="stretchButton_Click"></Button>
+            <Button x:Name="stretchButton" Content="Stretch" Margin="10, 1" Width="60" Height="25" ToolTip="Stretch the histogram" Click="stretchButton_Click"></Button>
             <Separator Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" Margin="10, 0"/>
-            <Button x:Name="lightenButton" Content="Lighten" Margin="10, 0" Width="60" Height="25" ToolTip="Lighten the image"></Button>
+            <Button x:Name="lightenButton" Content="Lighten" Margin="10, 0" Width="60" Height="25" ToolTip="Make the image lighter" Click="lightenButton_Click"></Button>
             <Separator Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" Margin="10, 0"/>
-            <Button x:Name="darkenButton" Content="Darken" Margin="10, 0" Width="60" Height="25" ToolTip="Darken the image"></Button>
+            <Button x:Name="darkenButton" Content="Dim" Margin="10, 0" Width="60" Height="25" ToolTip="Make the image darker" Click="darkenButton_Click"></Button>
             <Separator Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" Margin="10, 0"/>
-            <Button x:Name="equalizeButton" Content="Equalize" Margin="10, 0" Width="60" Height="25" ToolTip="Even the histogram" Click="equalizeButton_Click"></Button>
+            <Button x:Name="equalizeButton" Content="Equalize" Margin="10, 0" Width="60" Height="25" ToolTip="Equalize the histogram" Click="equalizeButton_Click"></Button>
         </StackPanel>
 
         <lvc:CartesianChart Series="{Binding SeriesCollection}" LegendLocation="Right" Grid.Column="1" Grid.Row="2" Margin="0, 5, 0, 0">
@@ -45,10 +45,6 @@
             </lvc:CartesianChart.AxisX>
         </lvc:CartesianChart>
 
-        <StackPanel Grid.Column="1" Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Right">
-            <Button Content="Cancel" Margin="5, 0" Width="60" Height="25" ToolTip="Cancel all changes"></Button>
-            <Button Content="Apply" Margin="5, 0" Width="60" Height="25" ToolTip="Apply on editable image in previous window"></Button>
-
-        </StackPanel>
+        
     </Grid>
 </Window>

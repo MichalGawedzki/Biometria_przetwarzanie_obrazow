@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:biometria_przetwarzanie_obrazow"
         mc:Ignorable="d"
-        Title="MainWindow" Height="800" Width="1400">
+        Title="MainWindow" Height="787" Width="1400">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="15"/>
@@ -31,9 +31,8 @@
                     <MenuItem x:Name="saveImageButton" Header="_Save" Click="saveImageButton_Click"/>
                 </MenuItem>
                 <MenuItem Header="Histogram">
-                    <MenuItem x:Name="separatedHistograms" Header="R+G+B" Click="separatedHistograms_Click"/>
-                    <MenuItem x:Name="overallHistogram" Header="(R+G+B)3" Click="overallHistogram_Click"/>
-                    <MenuItem x:Name="makeBHistogramButton" Header="Blue"/>
+                    <MenuItem x:Name="separatedHistograms" Header="Separated histograms" Click="separatedHistograms_Click"/>
+                    <MenuItem x:Name="overallHistogram" Header="General histogram" Click="overallHistogram_Click"/>
                 </MenuItem>
             </Menu>
         </DockPanel>
@@ -42,7 +41,7 @@
             <Image x:Name="originalImage" Margin="10"></Image>
         </Border>
 
-        <Border BorderBrush="Black" BorderThickness="1" Grid.Column="2" Grid.Row="3" Margin="10">
+        <Border x:Name="borderEditable" BorderBrush="Black" BorderThickness="1" Grid.Column="2" Grid.Row="3" Margin="10">
             <ScrollViewer HorizontalScrollBarVisibility="Auto" >
                 <Image x:Name="image" RenderTransformOrigin="0.5,0.5" Stretch="None" MouseMove="image_MouseMove" MouseLeftButtonDown="image_MouseLeftButtonDown">
                     <Image.RenderTransform>
