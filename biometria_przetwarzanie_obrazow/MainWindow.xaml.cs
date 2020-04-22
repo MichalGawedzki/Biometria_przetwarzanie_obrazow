@@ -30,6 +30,7 @@ namespace biometria_przetwarzanie_obrazow {
 
 		string filePath = string.Empty;
 		public Bitmap img { get; set; }
+		public Bitmap imgCopy;
 		private void loadImageButton_Click(object sender, RoutedEventArgs e) {
 			OpenFileDialog open = new OpenFileDialog();
 			open.Title = "Select a picture";
@@ -37,6 +38,7 @@ namespace biometria_przetwarzanie_obrazow {
 			if (open.ShowDialog() == true) {
 
 				img = new Bitmap(open.FileName);
+				imgCopy = new Bitmap(open.FileName);
 				originalImage.Source = BitmapToImageSource(img);
 				image.Source = BitmapToImageSource(img);
 
@@ -44,6 +46,7 @@ namespace biometria_przetwarzanie_obrazow {
 				MemoryStream MS = new MemoryStream();
 				img.Save(MS, System.Drawing.Imaging.ImageFormat.Jpeg);
 				img = new Bitmap(MS);
+				imgCopy = new Bitmap(MS);
 
 				rTextBox.Text = "0";
 				gTextBox.Text = "0";
@@ -224,6 +227,38 @@ namespace biometria_przetwarzanie_obrazow {
 			HistogramWindow histogramWindow = new HistogramWindow(this);
 			histogramWindow.firstOverallHistogram();
 			histogramWindow.Show();
+		}
+
+		private void tresholdButton_Click(object sender, RoutedEventArgs e) {
+			int threshold = Int32.Parse(thresholdTextBox.Text.ToString());
+			if (threshold > 255 || threshold < 0) return;
+			binarise(threshold);
+		}
+
+		public void binarise(int threshold) {
+			int r, g, b;
+			for (int i = 0; i < img.Width; i++) {
+				for (int j = 0; j < img.Height; j++) {
+					System.Drawing.Color color = img.GetPixel(i, j);
+					r = color.R;
+					g = color.G;
+					b = color.B;
+
+					if (r < threshold) r = 0;
+					else r = 255;
+					if (g < threshold) g = 0;
+					else g = 255;
+					if (b < threshold) b = 0;
+					else b = 255;
+
+					img.SetPixel(i, j, System.Drawing.Color.FromArgb(255, r, g, b));
+				}
+			}
+			image.Source = BitmapToImageSource(img);
+		}
+
+		private void otsuButton_Click(object sender, RoutedEventArgs e) {
+			
 		}
 	}
 
