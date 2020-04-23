@@ -77,6 +77,10 @@
             </StackPanel>
             <TextBlock Text="Threshold: " FontSize="20"/>
             <TextBox x:Name="thresholdTextBox" Width="40" FontSize="20" Text="" PreviewTextInput="rgbValueValidation"/>
+            <TextBlock Text="k: " FontSize="20" Margin="10, 0, 0, 0"/>
+            <TextBox x:Name="kTextBox" Width="40" FontSize="20" Text="-0,5"/>
+            <TextBlock Text="Window size: " FontSize="20" Margin="10, 0, 0, 0"/>
+            <TextBox x:Name="windowSizeTextBox" Width="40" FontSize="20" Text="7" PreviewTextInput="rgbValueValidation"/>
             <StackPanel Orientation="Horizontal" Margin="10, 0">
                 <Separator Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" />
             </StackPanel>

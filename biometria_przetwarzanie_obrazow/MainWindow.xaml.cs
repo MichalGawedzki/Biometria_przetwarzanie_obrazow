@@ -417,8 +417,15 @@ namespace biometria_przetwarzanie_obrazow {
 			double weightBackground, weightForeground;
 			double meanBackground, meanForeground;
 			int[] histogram;
-			double k = -0.5;
-			int windowSize = 7;
+
+			string ktext = kTextBox.Text;
+			char sign = ktext[0];
+			if (sign != '-') {
+				return;
+			}
+
+			double k = Convert.ToDouble(ktext);
+			int windowSize = Int32.Parse(windowSizeTextBox.Text);
 
 			for (int i = 0; i < img.Width; i++) {
 				for (int j = 0; j < img.Height; j++) {
@@ -429,16 +436,14 @@ namespace biometria_przetwarzanie_obrazow {
 				}
 			}
 
-			// histogram
-			histogram = calculateHistogram(img);
-
 			// calculate niblack thresholds
 			for (int i = 0; i < img.Width; i++) {
 				for(int j = 0; j < img.Height; j++) {
-					thresholdArray[i, j] = calculateNiblackThreshold(i, j, histogram, k, windowSize);
+					thresholdArray[i, j] = calculateNiblackThreshold(i, j, k, windowSize);
 				}
 			}
 
+			// binarisation
 			int colorValue;
 			for (int i = 0; i < img.Width; i++) {
 				for (int j = 0; j < img.Height; j++) {
@@ -454,7 +459,7 @@ namespace biometria_przetwarzanie_obrazow {
 			image.Source = BitmapToImageSource(img);
 		}
 
-		private int calculateNiblackThreshold(int width, int height, int[] hist, double k, int windowSize) {
+		private int calculateNiblackThreshold(int width, int height, double k, int windowSize) {
 
 			double mean = 0; ;
 			double deviation = 0;
