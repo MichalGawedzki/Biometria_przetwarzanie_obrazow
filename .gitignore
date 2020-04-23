@@ -4,6 +4,8 @@
 ## Get latest from https://github.com/github/gitignore/blob/master/VisualStudio.gitignore
 
 /biometria_przetwarzanie_obrazow/pictures/
+*.zip
+/pictures/
 
 # User-specific files
 *.rsuser
