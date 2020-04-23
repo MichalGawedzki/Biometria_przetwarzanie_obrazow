@@ -31,6 +31,11 @@ namespace biometria_przetwarzanie_obrazow {
 		string filePath = string.Empty;
 		public Bitmap img { get; set; }
 		public Bitmap imgCopy;
+		int[,] r;
+		int[,] g;
+		int[,] b;
+
+
 		private void loadImageButton_Click(object sender, RoutedEventArgs e) {
 			OpenFileDialog open = new OpenFileDialog();
 			open.Title = "Select a picture";
@@ -55,6 +60,10 @@ namespace biometria_przetwarzanie_obrazow {
 
 				borderOriginal.BorderBrush = Brushes.Black;
 				borderOriginal.BorderThickness = new Thickness(1);
+
+				r = new int[img.Width, img.Height];
+				g = new int[img.Width, img.Height];
+				b = new int[img.Width, img.Height];
 			}
 		}
 
@@ -230,12 +239,164 @@ namespace biometria_przetwarzanie_obrazow {
 		}
 
 		private void tresholdButton_Click(object sender, RoutedEventArgs e) {
+			if (String.IsNullOrEmpty(thresholdTextBox.Text)) {
+				thresholdTextBox.BorderBrush = Brushes.Red;
+				return;
+			}
+			else thresholdTextBox.BorderBrush = Brushes.Black;
+
 			int threshold = Int32.Parse(thresholdTextBox.Text.ToString());
 			if (threshold > 255 || threshold < 0) return;
 			binarise(threshold);
 		}
 
 		public void binarise(int threshold) {
+			int r;
+			for (int i = 0; i < img.Width; i++) {
+				for (int j = 0; j < img.Height; j++) {
+					System.Drawing.Color color = img.GetPixel(i, j);
+					r = color.R;
+
+					if (r < threshold) r = 0;
+					else r = 255;
+
+					img.SetPixel(i, j, System.Drawing.Color.FromArgb(255, r, r, r));
+
+				}
+			}
+			image.Source = BitmapToImageSource(img);
+		}
+
+		private void otsuButton_Click(object sender, RoutedEventArgs e) {
+			int r, g, b, colorValue;
+
+			// gray scale
+			//for (int i = 0; i < img.Width; i++) {
+			//	for (int j = 0; j < img.Height; j++) {
+			//		System.Drawing.Color color = img.GetPixel(i, j);
+			//		r = color.R;
+			//		g = color.G;
+			//		b = color.B;
+
+			//		int meanColor = Convert.ToInt32(0.2126 * r + 0.7152 * g + 0.0722 * b);
+
+			//		img.SetPixel(i, j, System.Drawing.Color.FromArgb(255, meanColor, meanColor, meanColor));
+			//	}
+			//}
+
+			// otsu calculation
+			int threshold = calculateOtsuThreshold(img);
+
+			// binarisation
+			for (int i = 0; i < img.Width; i++) {
+				for (int j = 0; j < img.Height; j++) {
+					System.Drawing.Color color = img.GetPixel(i, j);
+					colorValue = color.R;
+
+					if (colorValue < threshold) colorValue = 0;
+					else colorValue = 255;
+
+					img.SetPixel(i, j, System.Drawing.Color.FromArgb(255, colorValue, colorValue, colorValue));
+				}
+			}
+			thresholdTextBox.Text = threshold.ToString();
+			image.Source = BitmapToImageSource(img);
+		}
+
+		private int calculateOtsuThreshold(Bitmap bitmapImage) {
+
+			double weightBackground, weightForeground;
+			double meanBackground, meanForeground;
+			int[] histogram;
+			double[] varianceArray = new double[256];
+			double maxVariance = 0;
+			int threshold = 0;
+
+			histogram = calculateHistogram(bitmapImage);
+
+
+
+			for (int i = 0; i < 256; i++) {
+				weightBackground = getWeightBackground(histogram, i);
+				weightForeground = getWeightForeground(histogram, i);
+				meanBackground = getMeanBackground(histogram, i);
+				meanForeground = getMeanForeground(histogram, i);
+				varianceArray[i] = getVariance(weightBackground, weightForeground, meanBackground, meanForeground);
+
+				if (varianceArray[i] > maxVariance) {
+					maxVariance = varianceArray[i];
+					threshold = i;
+				}
+			}
+
+			return threshold;
+		}
+
+		private double getVariance(double wb, double wf, double mb, double mf) {
+
+
+			double variance = wb * wf * Math.Pow(mb - mf, 2);
+			return variance;
+		}
+
+		private double getMeanBackground(int[] hist, int threshold) {
+			int mb = 0;
+			int sum = 0;
+			for (int i = 0; i < threshold; i++) {
+				mb += (i * hist[i]);
+				sum += hist[i];
+			}
+
+			if(sum > 0) mb /= sum;
+			return mb;
+		}
+
+		private double getMeanForeground(int[] hist, int threshold) {
+			int mf = 0;
+			int sum = 0;
+			for (int i = threshold; i < 256; i++) {
+				mf += (i * hist[i]);
+				sum += hist[i];
+			}
+			if (sum > 0) mf /= sum;
+			return mf;
+		}
+
+		private double getWeightBackground(int[] hist, int threshold) {
+			double wb = 0;
+			for (int i = 0; i < threshold; i++) {
+				wb += hist[i];
+			}
+			wb /= (256*256);
+			return wb;
+		}
+		private double getWeightForeground(int[] hist, int threshold) {
+			double wb = 0;
+			for (int i = threshold; i < 256; i++) {
+				wb += hist[i];
+			}
+			wb /= (256*256);
+			return wb;
+		}
+
+		private int[] calculateHistogram(Bitmap bitmapImage) {
+			int[] arr = new int[256];
+
+			int r, g, b;
+			for (int i = 0; i < bitmapImage.Width; i++) {
+				for (int j = 0; j < bitmapImage.Height; j++) {
+					System.Drawing.Color color = bitmapImage.GetPixel(i, j);
+					r = color.R;
+					g = color.G;
+					b = color.B;
+					int meanColor = Convert.ToInt32(0.2126 * r + 0.7152 * g + 0.0722 * b);
+					arr[meanColor]++;
+				}
+			}
+			return arr;
+		}
+
+		private void grayScaleButton_Click(object sender, RoutedEventArgs e) {
 			int r, g, b;
 			for (int i = 0; i < img.Width; i++) {
 				for (int j = 0; j < img.Height; j++) {
@@ -243,22 +404,92 @@ namespace biometria_przetwarzanie_obrazow {
 					r = color.R;
 					g = color.G;
 					b = color.B;
+					int meanColor = Convert.ToInt32(0.2126 * r + 0.7152 * g + 0.0722 * b);
+					img.SetPixel(i, j, System.Drawing.Color.FromArgb(255, meanColor, meanColor, meanColor));
 
-					if (r < threshold) r = 0;
-					else r = 255;
-					if (g < threshold) g = 0;
-					else g = 255;
-					if (b < threshold) b = 0;
-					else b = 255;
-
-					img.SetPixel(i, j, System.Drawing.Color.FromArgb(255, r, g, b));
 				}
 			}
 			image.Source = BitmapToImageSource(img);
 		}
 
-		private void otsuButton_Click(object sender, RoutedEventArgs e) {
-			
+		private void niblackButton_Click(object sender, RoutedEventArgs e) {
+			int[,] thresholdArray = new int[img.Width, img.Height];
+			double weightBackground, weightForeground;
+			double meanBackground, meanForeground;
+			int[] histogram;
+			double k = -0.5;
+			int windowSize = 7;
+
+			for (int i = 0; i < img.Width; i++) {
+				for (int j = 0; j < img.Height; j++) {
+					System.Drawing.Color color = img.GetPixel(i, j);
+					r[i, j] = color.R;
+					g[i, j] = color.G;
+					b[i, j] = color.B;
+				}
+			}
+
+			// histogram
+			histogram = calculateHistogram(img);
+
+			// calculate niblack thresholds
+			for (int i = 0; i < img.Width; i++) {
+				for(int j = 0; j < img.Height; j++) {
+					thresholdArray[i, j] = calculateNiblackThreshold(i, j, histogram, k, windowSize);
+				}
+			}
+
+			int colorValue;
+			for (int i = 0; i < img.Width; i++) {
+				for (int j = 0; j < img.Height; j++) {
+					System.Drawing.Color color = img.GetPixel(i, j);
+					colorValue = color.R;
+
+					if (colorValue < thresholdArray[i, j]) colorValue = 0;
+					else colorValue = 255;
+
+					img.SetPixel(i, j, System.Drawing.Color.FromArgb(255, colorValue, colorValue, colorValue));
+				}
+			}
+			image.Source = BitmapToImageSource(img);
+		}
+
+		private int calculateNiblackThreshold(int width, int height, int[] hist, double k, int windowSize) {
+
+			double mean = 0; ;
+			double deviation = 0;
+			int spanDistance = Convert.ToInt32(windowSize / 2);
+			int elements = 0;
+			int threshold;
+
+			for (int i = width - spanDistance; i < width + spanDistance; i++) {
+				for(int j = height - spanDistance; j < height + spanDistance; j++) {
+					if (i < 0) continue;
+					if (j < 0) continue;
+					if (i >= img.Width) continue;
+					if (j >= img.Height) continue;
+					mean += r[i, j];
+					elements++;
+				}
+			}
+			mean /= elements;
+
+			elements = 0;
+			for (int i = width - spanDistance; i < width + spanDistance; i++) {
+				for (int j = height - spanDistance; j < height + spanDistance; j++) {
+					if (i < 0) continue;
+					if (j < 0) continue;
+					if (i >= img.Width) continue;
+					if (j >= img.Height) continue;
+					deviation += Math.Pow((r[i, j] - mean), 2);
+					elements++;
+				}
+			}
+
+			deviation = Math.Sqrt(deviation / elements);
+			threshold = (int)Math.Round(mean + k * deviation);
+
+			return threshold;
 		}
 	}
 

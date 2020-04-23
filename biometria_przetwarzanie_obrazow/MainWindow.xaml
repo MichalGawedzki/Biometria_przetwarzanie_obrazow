@@ -70,14 +70,20 @@
             <StackPanel Orientation="Horizontal" Margin="10, 0">
                 <Separator Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" />
             </StackPanel>
-            <TextBlock Text="Zoom: " FontSize="20" Margin="10, 0, 0, 0"/>
-            <Slider x:Name="zoomSlider" Width="170" Margin="0, 0, 10, 0" Value="5" VerticalAlignment="Center" ValueChanged="zoomSlider_ValueChanged"/>
+            <TextBlock Text="Zoom: " FontSize="20"/>
+            <Slider x:Name="zoomSlider" Width="170" Value="5" VerticalAlignment="Center" ValueChanged="zoomSlider_ValueChanged"/>
             <StackPanel Orientation="Horizontal" Margin="10, 0">
                 <Separator Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" />
             </StackPanel>
+            <TextBlock Text="Threshold: " FontSize="20"/>
             <TextBox x:Name="thresholdTextBox" Width="40" FontSize="20" Text="" PreviewTextInput="rgbValueValidation"/>
-            <Button x:Name="tresholdButton" Content="Treshold" Margin="10, 0" Padding="10, 0" Click="tresholdButton_Click"/>
-            <Button x:Name="otsuButton" Content="Otsu" Click="otsuButton_Click"/>
+            <StackPanel Orientation="Horizontal" Margin="10, 0">
+                <Separator Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" />
+            </StackPanel>
+            <Button x:Name="grayScaleButton" Content="Grayscale" Padding="10" Click="grayScaleButton_Click"/>
+            <Button x:Name="tresholdButton" Content="User" Padding="10, 0" Click="tresholdButton_Click" Margin="10, 0, 0, 0"/>
+            <Button x:Name="otsuButton" Content="Otsu" Click="otsuButton_Click" Padding="10" Margin="10, 0, 0, 0"/>
+            <Button x:Name="niblackButton" Content="Niblack" Click="niblackButton_Click" Padding="10" Margin="10, 0, 0, 0"/>
         </StackPanel>
 
         <TextBlock x:Name="labelOriginal" Grid.Row="4" Grid.Column="1" Text="Original image" HorizontalAlignment="Center" VerticalAlignment="Center"/>
