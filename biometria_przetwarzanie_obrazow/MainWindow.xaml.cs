@@ -347,7 +347,7 @@ namespace biometria_przetwarzanie_obrazow {
 				sum += hist[i];
 			}
 
-			if(sum > 0) mb /= sum;
+			if (sum > 0) mb /= sum;
 			return mb;
 		}
 
@@ -367,7 +367,7 @@ namespace biometria_przetwarzanie_obrazow {
 			for (int i = 0; i < threshold; i++) {
 				wb += hist[i];
 			}
-			wb /= (256*256);
+			wb /= (256 * 256);
 			return wb;
 		}
 		private double getWeightForeground(int[] hist, int threshold) {
@@ -375,7 +375,7 @@ namespace biometria_przetwarzanie_obrazow {
 			for (int i = threshold; i < 256; i++) {
 				wb += hist[i];
 			}
-			wb /= (256*256);
+			wb /= (256 * 256);
 			return wb;
 		}
 
@@ -438,7 +438,7 @@ namespace biometria_przetwarzanie_obrazow {
 
 			// calculate niblack thresholds
 			for (int i = 0; i < img.Width; i++) {
-				for(int j = 0; j < img.Height; j++) {
+				for (int j = 0; j < img.Height; j++) {
 					thresholdArray[i, j] = calculateNiblackThreshold(i, j, k, windowSize);
 				}
 			}
@@ -468,7 +468,7 @@ namespace biometria_przetwarzanie_obrazow {
 			int threshold;
 
 			for (int i = width - spanDistance; i < width + spanDistance; i++) {
-				for(int j = height - spanDistance; j < height + spanDistance; j++) {
+				for (int j = height - spanDistance; j < height + spanDistance; j++) {
 					if (i < 0) continue;
 					if (j < 0) continue;
 					if (i >= img.Width) continue;
@@ -495,6 +495,204 @@ namespace biometria_przetwarzanie_obrazow {
 			threshold = (int)Math.Round(mean + k * deviation);
 
 			return threshold;
+		}
+
+
+		public int[,] mask;
+		private void maskInputButton_Click(object sender, RoutedEventArgs e) {
+			MaskInputWindow maskWindow = new MaskInputWindow(this);
+			maskWindow.Top = 400;
+			maskWindow.Left = 400;
+			maskWindow.Show();
+		}
+
+		private void linearFilterButton_Click(object sender, RoutedEventArgs e) {
+
+			r = new int[img.Width, img.Height];
+			g = new int[img.Width, img.Height];
+			b = new int[img.Width, img.Height];
+
+			for (int width = 0; width < img.Width; width++) {
+				for (int height = 0; height < img.Height; height++) {
+					filterPixelConvolutionally(width, height, /*mask size*/ 3);
+				}
+			}
+
+			for (int width = 0; width < img.Width; width++) {
+				for (int height = 0; height < img.Height; height++) {
+					img.SetPixel(width, height, System.Drawing.Color.FromArgb(r[width, height], g[width, height], b[width, height]));
+				}
+			}
+
+			image.Source = BitmapToImageSource(img);
+		}
+
+		private void filterPixelConvolutionally(int width, int height, int maskSize) {
+
+			int spanDistance = maskSize / 2;
+			int rValue;
+			int gValue;
+			int bValue;
+			int rSum = 0;
+			int gSum = 0;
+			int bSum = 0;
+			int maskX = 0, maskY = 0;
+
+			for (int i = width - spanDistance; i <= width + spanDistance; i++) {
+				for (int j = height - spanDistance; j <= height + spanDistance; j++) {
+
+					if (i < 0) continue;
+					if (j < 0) continue;
+					if (i >= img.Width) continue;
+					if (j >= img.Height) continue;
+
+					System.Drawing.Color color = img.GetPixel(i, j);
+					rValue = color.R;
+					gValue = color.G;
+					bValue = color.B;
+
+					int maskValue = mask[maskX, maskY];
+					rValue *= maskValue;
+					gValue *= maskValue;
+					bValue *= maskValue;
+					rSum += rValue;
+					gSum += gValue;
+					bSum += bValue;
+					maskY++;
+				}
+				maskY = 0;
+				maskX++;
+			}
+
+			if (rSum < 0) rSum = 0;
+			else if (rSum > 255) rSum = 255;
+
+			if (gSum < 0) gSum = 0;
+			else if (gSum > 255) gSum = 255;
+
+			if (bSum < 0) bSum = 0;
+			else if (bSum > 255) bSum = 255;
+
+			r[width, height] = rSum;
+			g[width, height] = gSum;
+			b[width, height] = bSum;
+		}
+
+		int[,] rNew;
+		int[,] gNew;
+		int[,] bNew;
+
+		private void kuwaharaButton_Click(object sender, RoutedEventArgs e) {
+
+			rNew = new int[img.Width, img.Height];
+			gNew = new int[img.Width, img.Height];
+			bNew = new int[img.Width, img.Height];
+
+			const int size = 5;
+			mask = new int[size, size];
+
+			for (int i = 0; i < img.Width; i++) {
+				for (int j = 0; j < img.Height; j++) {
+					System.Drawing.Color color = img.GetPixel(i, j);
+					r[i, j] = color.R;
+					g[i, j] = color.G;
+					b[i, j] = color.B;
+				}
+			}
+
+			for (int i = 0; i < img.Width; i++) {
+				for (int j = 0; j < img.Height; j++) {
+					filterPixelKuwahara(i, j, size);
+
+				}
+			}
+
+		}
+
+		private int filterPixelKuwahara(int width, int height, int size) {
+
+			int spanDistance = size / 2;
+
+			int firstMean, firstVariance;
+			int secondMean, secondVariance;
+			int thirdMean, thirdVariance;
+			int fourthMean, fourthVariance;
+			int minVariance, returnedMean;
+
+
+			firstMean =  getKuwaharaMean(width - spanDistance / 2, height - spanDistance / 2, spanDistance);
+			secondMean = getKuwaharaMean(width + spanDistance / 2, height - spanDistance / 2, spanDistance);
+			thirdMean =  getKuwaharaMean(width - spanDistance / 2, height + spanDistance / 2, spanDistance);
+			fourthMean = getKuwaharaMean(width + spanDistance / 2, height + spanDistance / 2, spanDistance);
+
+			firstVariance =  getKuwaharaVariance(width - spanDistance / 2, height - spanDistance / 2, firstMean, spanDistance);
+			secondVariance = getKuwaharaVariance(width + spanDistance / 2, height - spanDistance / 2, secondMean, spanDistance);
+			thirdVariance =  getKuwaharaVariance(width - spanDistance / 2, height + spanDistance / 2, thirdMean, spanDistance);
+			fourthVariance = getKuwaharaVariance(width + spanDistance / 2, height + spanDistance / 2, fourthMean, spanDistance);
+
+			minVariance = firstVariance;
+			returnedMean = firstMean;
+			if (secondVariance < minVariance) {
+				minVariance = secondVariance;
+				returnedMean = secondMean;
+			}
+
+			if (thirdVariance < minVariance) {
+				minVariance = thirdVariance;
+				returnedMean = thirdMean;
+			}
+
+			if (fourthVariance < minVariance) {
+				returnedMean = fourthMean;
+			}
+
+			return returnedMean;
+		}
+
+		private int getKuwaharaMean(int width, int height, int size) {
+			int spanDistance = size / 2;
+			int rSum = 0;
+			int gSum = 0;
+			int bSum = 0;
+			int quantity = 0;
+
+			for (int i = width - spanDistance; i <= width + spanDistance; i++) {
+				for (int j = height - spanDistance; j <= height + spanDistance; j++) {
+					if (i < 0) continue;
+					if (j < 0) continue;
+					if (i >= img.Width) continue;
+					if (j >= img.Height) continue;
+
+					rSum += r[i, j];
+					gSum += g[i, j];
+					bSum += b[i, j];
+					quantity++;
+				}
+			}
+
+			return ((rSum + gSum + bSum) / 3) / quantity;
+		}
+
+		private int getKuwaharaVariance(int width, int height, int mean, int size) {
+
+			int spanDistance = size / 2;
+			double sum = 0;
+			int n = 0;
+
+			for (int i = width - spanDistance; i <= width + spanDistance; i++) {
+				for (int j = height - spanDistance; j <= height + spanDistance; j++) {
+					if (i < 0) continue;
+					if (j < 0) continue;
+					if (i >= img.Width) continue;
+					if (j >= img.Height) continue;
+
+					int rgb = r[i, j] + g[i, j] + b[i, j];
+
+					sum += Math.Pow(rgb - mean, 2);
+					n++;
+				}
+			}
+			return Convert.ToInt32(sum / n);
 		}
 	}
 

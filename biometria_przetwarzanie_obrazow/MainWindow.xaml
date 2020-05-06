@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:biometria_przetwarzanie_obrazow"
         mc:Ignorable="d"
-        Title="MainWindow" Height="787" Width="1400">
+        Title="Michal Gawedzki" Height="787" Width="1400">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="15"/>
@@ -17,8 +17,8 @@
 
         <Grid.RowDefinitions>
             <RowDefinition Height="18"/>
-            <RowDefinition Height="50"/>
-            <RowDefinition Height="30"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="20"/>
             <RowDefinition Height="1"/>
@@ -55,7 +55,7 @@
             </ScrollViewer>
         </Border>
 
-        <StackPanel Grid.Column="1" Grid.Row="1" Grid.ColumnSpan="2" Orientation="Horizontal" VerticalAlignment="Bottom" Margin="10, 0">
+        <StackPanel Grid.Column="1" Grid.Row="1" Grid.ColumnSpan="2" Orientation="Horizontal" VerticalAlignment="Bottom" Margin="10, 10">
 
             <StackPanel Orientation="Vertical">
                 <RadioButton x:Name="readRgbRadioButton" GroupName="colorgrp"  Margin="0, 0, 0, 1">Read RGB</RadioButton>
@@ -78,9 +78,9 @@
             <TextBlock Text="Threshold: " FontSize="20"/>
             <TextBox x:Name="thresholdTextBox" Width="40" FontSize="20" Text="" PreviewTextInput="rgbValueValidation"/>
             <TextBlock Text="k: " FontSize="20" Margin="10, 0, 0, 0"/>
-            <TextBox x:Name="kTextBox" Width="40" FontSize="20" Text="-0,5"/>
+            <TextBox x:Name="kTextBox" Width="40" FontSize="20" Text=""/>
             <TextBlock Text="Window size: " FontSize="20" Margin="10, 0, 0, 0"/>
-            <TextBox x:Name="windowSizeTextBox" Width="40" FontSize="20" Text="7" PreviewTextInput="rgbValueValidation"/>
+            <TextBox x:Name="windowSizeTextBox" Width="40" FontSize="20" Text="" PreviewTextInput="rgbValueValidation"/>
             <StackPanel Orientation="Horizontal" Margin="10, 0">
                 <Separator Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" />
             </StackPanel>
@@ -88,6 +88,26 @@
             <Button x:Name="tresholdButton" Content="User" Padding="10, 0" Click="tresholdButton_Click" Margin="10, 0, 0, 0"/>
             <Button x:Name="otsuButton" Content="Otsu" Click="otsuButton_Click" Padding="10" Margin="10, 0, 0, 0"/>
             <Button x:Name="niblackButton" Content="Niblack" Click="niblackButton_Click" Padding="10" Margin="10, 0, 0, 0"/>
+            <StackPanel Orientation="Horizontal" Margin="10, 0">
+                <Separator Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" />
+            </StackPanel>
+            
+        </StackPanel>
+
+        <StackPanel Grid.Column="1" Grid.Row="2" Grid.ColumnSpan="2" Orientation="Horizontal" VerticalAlignment="Bottom" Margin="10, 10">
+            <Button x:Name="maskInputButton" Content="Enter mask" Padding="10" Click="maskInputButton_Click"/>
+            <StackPanel Orientation="Horizontal" Margin="10, 0">
+                <Separator Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" />
+            </StackPanel>
+            <Button x:Name="linearFilterButton" Content="Linear filter" Padding="10" Margin="0, 0, 10, 0" Click="linearFilterButton_Click"/>
+            <!--<Button x:Name="prewittButton" Content="Prewitt" Padding="10" Margin="0, 0, 10, 0" Click="prewittButton_Click"/>
+            <Button x:Name="sobelButton" Content="Sobel" Padding="10" Margin="0, 0, 10, 0"/>
+            <Button x:Name="LaplaceButton" Content="Laplace" Padding="10" Margin="0, 0, 10, 0"/>
+            <Button x:Name="cornerDetectButton" Content="CornerDetect" Padding="10"/>-->
+
+            <Button x:Name="kuwaharaButton" Content="Kuwahara" Padding="10" Margin="0, 0, 10, 0" Click="kuwaharaButton_Click"/>
+
+            <Button x:Name="medianButton" Content="Median" Padding="10"/>
         </StackPanel>
 
         <TextBlock x:Name="labelOriginal" Grid.Row="4" Grid.Column="1" Text="Original image" HorizontalAlignment="Center" VerticalAlignment="Center"/>
