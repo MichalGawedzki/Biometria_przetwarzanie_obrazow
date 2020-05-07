@@ -607,9 +607,15 @@ namespace biometria_przetwarzanie_obrazow {
 				}
 			}
 
+			for (int i = 0; i < img.Width; i++) {
+				for (int j = 0; j < img.Height; j++) {
+					img.SetPixel(i, j, System.Drawing.Color.FromArgb(rNew[i, j], gNew[i, j], bNew[i, j]));
+				}
+			}
+			image.Source = BitmapToImageSource(img);
 		}
 
-		private int filterPixelKuwahara(int width, int height, int size) {
+		private void filterPixelKuwahara(int width, int height, int size) {
 
 			int spanDistance = size / 2;
 
@@ -617,39 +623,97 @@ namespace biometria_przetwarzanie_obrazow {
 			int secondMean, secondVariance;
 			int thirdMean, thirdVariance;
 			int fourthMean, fourthVariance;
-			int minVariance, returnedMean;
+			int minVariance, newVal;
 
 
-			firstMean =  getKuwaharaMean(width - spanDistance / 2, height - spanDistance / 2, spanDistance);
-			secondMean = getKuwaharaMean(width + spanDistance / 2, height - spanDistance / 2, spanDistance);
-			thirdMean =  getKuwaharaMean(width - spanDistance / 2, height + spanDistance / 2, spanDistance);
-			fourthMean = getKuwaharaMean(width + spanDistance / 2, height + spanDistance / 2, spanDistance);
+			firstMean = getKuwaharaMean(width - spanDistance / 2, height - spanDistance / 2, spanDistance, "R");
+			secondMean = getKuwaharaMean(width + spanDistance / 2, height - spanDistance / 2, spanDistance, "R");
+			thirdMean = getKuwaharaMean(width - spanDistance / 2, height + spanDistance / 2, spanDistance, "R");
+			fourthMean = getKuwaharaMean(width + spanDistance / 2, height + spanDistance / 2, spanDistance, "R");
 
-			firstVariance =  getKuwaharaVariance(width - spanDistance / 2, height - spanDistance / 2, firstMean, spanDistance);
-			secondVariance = getKuwaharaVariance(width + spanDistance / 2, height - spanDistance / 2, secondMean, spanDistance);
-			thirdVariance =  getKuwaharaVariance(width - spanDistance / 2, height + spanDistance / 2, thirdMean, spanDistance);
-			fourthVariance = getKuwaharaVariance(width + spanDistance / 2, height + spanDistance / 2, fourthMean, spanDistance);
+			firstVariance = getKuwaharaVariance(width - spanDistance / 2, height - spanDistance / 2, firstMean, spanDistance, "R");
+			secondVariance = getKuwaharaVariance(width + spanDistance / 2, height - spanDistance / 2, secondMean, spanDistance, "R");
+			thirdVariance = getKuwaharaVariance(width - spanDistance / 2, height + spanDistance / 2, thirdMean, spanDistance, "R");
+			fourthVariance = getKuwaharaVariance(width + spanDistance / 2, height + spanDistance / 2, fourthMean, spanDistance, "R");
 
 			minVariance = firstVariance;
-			returnedMean = firstMean;
+			newVal = firstMean;
 			if (secondVariance < minVariance) {
 				minVariance = secondVariance;
-				returnedMean = secondMean;
+				newVal = secondMean;
 			}
 
 			if (thirdVariance < minVariance) {
 				minVariance = thirdVariance;
-				returnedMean = thirdMean;
+				newVal = thirdMean;
 			}
 
 			if (fourthVariance < minVariance) {
-				returnedMean = fourthMean;
+				newVal = fourthMean;
 			}
 
-			return returnedMean;
+			rNew[width, height] = newVal;
+
+			firstMean = getKuwaharaMean(width - spanDistance / 2, height - spanDistance / 2, spanDistance, "G");
+			secondMean = getKuwaharaMean(width + spanDistance / 2, height - spanDistance / 2, spanDistance, "G");
+			thirdMean = getKuwaharaMean(width - spanDistance / 2, height + spanDistance / 2, spanDistance, "G");
+			fourthMean = getKuwaharaMean(width + spanDistance / 2, height + spanDistance / 2, spanDistance, "G");
+
+			firstVariance = getKuwaharaVariance(width - spanDistance / 2, height - spanDistance / 2, firstMean, spanDistance, "G");
+			secondVariance = getKuwaharaVariance(width + spanDistance / 2, height - spanDistance / 2, secondMean, spanDistance, "G");
+			thirdVariance = getKuwaharaVariance(width - spanDistance / 2, height + spanDistance / 2, thirdMean, spanDistance, "G");
+			fourthVariance = getKuwaharaVariance(width + spanDistance / 2, height + spanDistance / 2, fourthMean, spanDistance, "G");
+
+			minVariance = firstVariance;
+			newVal = firstMean;
+			if (secondVariance < minVariance) {
+				minVariance = secondVariance;
+				newVal = secondMean;
+			}
+
+			if (thirdVariance < minVariance) {
+				minVariance = thirdVariance;
+				newVal = thirdMean;
+			}
+
+			if (fourthVariance < minVariance) {
+				newVal = fourthMean;
+			}
+
+			gNew[width, height] = newVal;
+
+			firstMean = getKuwaharaMean(width - spanDistance / 2, height - spanDistance / 2, spanDistance, "B");
+			secondMean = getKuwaharaMean(width + spanDistance / 2, height - spanDistance / 2, spanDistance, "B");
+			thirdMean = getKuwaharaMean(width - spanDistance / 2, height + spanDistance / 2, spanDistance, "B");
+			fourthMean = getKuwaharaMean(width + spanDistance / 2, height + spanDistance / 2, spanDistance, "B");
+
+			firstVariance = getKuwaharaVariance(width - spanDistance / 2, height - spanDistance / 2, firstMean, spanDistance, "B");
+			secondVariance = getKuwaharaVariance(width + spanDistance / 2, height - spanDistance / 2, secondMean, spanDistance, "B");
+			thirdVariance = getKuwaharaVariance(width - spanDistance / 2, height + spanDistance / 2, thirdMean, spanDistance, "B");
+			fourthVariance = getKuwaharaVariance(width + spanDistance / 2, height + spanDistance / 2, fourthMean, spanDistance, "B");
+
+			minVariance = firstVariance;
+			newVal = firstMean;
+			if (secondVariance < minVariance) {
+				minVariance = secondVariance;
+				newVal = secondMean;
+			}
+
+			if (thirdVariance < minVariance) {
+				minVariance = thirdVariance;
+				newVal = thirdMean;
+			}
+
+			if (fourthVariance < minVariance) {
+				newVal = fourthMean;
+			}
+
+			bNew[width, height] = newVal;
+
 		}
 
-		private int getKuwaharaMean(int width, int height, int size) {
+		private int getKuwaharaMean(int width, int height, int size, string colorName) {
+
 			int spanDistance = size / 2;
 			int rSum = 0;
 			int gSum = 0;
@@ -670,14 +734,18 @@ namespace biometria_przetwarzanie_obrazow {
 				}
 			}
 
-			return ((rSum + gSum + bSum) / 3) / quantity;
+			if (colorName.Equals("R")) return rSum / quantity;
+			else if (colorName.Equals("G")) return gSum / quantity;
+			else return bSum / quantity;
+
 		}
 
-		private int getKuwaharaVariance(int width, int height, int mean, int size) {
+		private int getKuwaharaVariance(int width, int height, int mean, int size, string colorName) {
 
 			int spanDistance = size / 2;
-			double sum = 0;
+			double rsum = 0, gsum = 0, bsum = 0;
 			int n = 0;
+			int rVar = 0, gVar = 0, bVar = 0;
 
 			for (int i = width - spanDistance; i <= width + spanDistance; i++) {
 				for (int j = height - spanDistance; j <= height + spanDistance; j++) {
@@ -686,13 +754,21 @@ namespace biometria_przetwarzanie_obrazow {
 					if (i >= img.Width) continue;
 					if (j >= img.Height) continue;
 
-					int rgb = r[i, j] + g[i, j] + b[i, j];
+					rVar = r[i, j];
+					gVar = g[i, j];
+					bVar = b[i, j];
 
-					sum += Math.Pow(rgb - mean, 2);
+					rsum += Math.Pow((r[i, j]) - mean, 2);
+					gsum += Math.Pow((g[i, j]) - mean, 2);
+					bsum += Math.Pow((b[i, j]) - mean, 2);
+
 					n++;
 				}
 			}
-			return Convert.ToInt32(sum / n);
+
+			if (colorName.Equals("R")) return Convert.ToInt32(rsum / n);
+			else if (colorName.Equals("G")) return Convert.ToInt32(gsum / n);
+			else return Convert.ToInt32(bsum / n);
 		}
 	}
 
