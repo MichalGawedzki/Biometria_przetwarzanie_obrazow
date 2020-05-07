@@ -95,7 +95,7 @@
         </StackPanel>
 
         <StackPanel Grid.Column="1" Grid.Row="2" Grid.ColumnSpan="2" Orientation="Horizontal" VerticalAlignment="Bottom" Margin="10, 10">
-            <Button x:Name="maskInputButton" Content="Enter mask" Padding="10" Click="maskInputButton_Click"/>
+            <Button x:Name="maskInputButton" Content="Set mask" Padding="10" Click="maskInputButton_Click"/>
             <StackPanel Orientation="Horizontal" Margin="10, 0">
                 <Separator Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" />
             </StackPanel>

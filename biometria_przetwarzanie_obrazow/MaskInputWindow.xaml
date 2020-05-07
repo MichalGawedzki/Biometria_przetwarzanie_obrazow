@@ -29,7 +29,6 @@
             <RowDefinition Height="15"/>
         </Grid.RowDefinitions>
 
-        <TextBox x:Name="matrixSize" Grid.Row="1" Grid.Column="1" FontSize="40" TextAlignment="Center"/>
         <TextBlock Grid.Column="1" Grid.Row="2" Text="1" FontSize="40" TextAlignment="Center" FontWeight="Bold"/>
         <TextBlock Grid.Column="1" Grid.Row="3" Text="2" FontSize="40" TextAlignment="Center" FontWeight="Bold"/>
         <TextBlock Grid.Column="1" Grid.Row="4" Text="3" FontSize="40" TextAlignment="Center" FontWeight="Bold"/>

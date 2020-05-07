@@ -56,7 +56,7 @@ namespace biometria_przetwarzanie_obrazow {
 				rTextBox.Text = "0";
 				gTextBox.Text = "0";
 				bTextBox.Text = "0";
-				zoomSlider.Value = 5;
+				//zoomSlider.Value = 5;
 
 				borderOriginal.BorderBrush = Brushes.Black;
 				borderOriginal.BorderThickness = new Thickness(1);
@@ -816,8 +816,8 @@ namespace biometria_przetwarzanie_obrazow {
 					if (i >= img.Width) continue;
 					if (j >= img.Height) continue;
 					rtable[tableIndex] = r[i, j];
-					btable[tableIndex] = g[i, j];
-					gtable[tableIndex] = b[i, j];
+					gtable[tableIndex] = g[i, j];
+					btable[tableIndex] = b[i, j];
 				}
 			}
 			Array.Sort(rtable);
