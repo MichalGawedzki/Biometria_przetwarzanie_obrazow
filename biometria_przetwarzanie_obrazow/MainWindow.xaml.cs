@@ -770,6 +770,95 @@ namespace biometria_przetwarzanie_obrazow {
 			else if (colorName.Equals("G")) return Convert.ToInt32(gsum / n);
 			else return Convert.ToInt32(bsum / n);
 		}
+
+		private void medianButton3x3_Click(object sender, RoutedEventArgs e) {
+
+			rNew = new int[img.Width, img.Height];
+			gNew = new int[img.Width, img.Height];
+			bNew = new int[img.Width, img.Height];
+
+			for (int i = 0; i < img.Width; i++) {
+				for (int j = 0; j < img.Height; j++) {
+					System.Drawing.Color color = img.GetPixel(i, j);
+					r[i, j] = color.R;
+					g[i, j] = color.G;
+					b[i, j] = color.B;
+				}
+			}
+
+			for (int i = 0; i < img.Width; i++) {
+				for (int j = 0; j < img.Height; j++) {
+					medianFilter(i, j, 3);
+				}
+			}
+
+			for (int i = 0; i < img.Width; i++) {
+				for (int j = 0; j < img.Height; j++) {
+					img.SetPixel(i, j, System.Drawing.Color.FromArgb(rNew[i, j], gNew[i, j], bNew[i, j]));
+				}
+			}
+			image.Source = BitmapToImageSource(img);
+		}
+
+		private void medianFilter(int width, int height, int size) {
+
+			int spanDistance = size / 2;
+			int[] rtable = new int[size * size];
+			int[] gtable = new int[size * size];
+			int[] btable = new int[size * size];
+			int rMedianValue, gMedianValue, bMedianValue;
+			int tableIndex = 0;
+
+			for (int i = width - spanDistance; i <= width + spanDistance; i++) {
+				for (int j = height - spanDistance; j <= height + spanDistance; j++, tableIndex++) {
+					if (i < 0) continue;
+					if (j < 0) continue;
+					if (i >= img.Width) continue;
+					if (j >= img.Height) continue;
+					rtable[tableIndex] = r[i, j];
+					btable[tableIndex] = g[i, j];
+					gtable[tableIndex] = b[i, j];
+				}
+			}
+			Array.Sort(rtable);
+			Array.Sort(gtable);
+			Array.Sort(btable);
+			rMedianValue = rtable[size * size / 2];
+			gMedianValue = gtable[size * size / 2];
+			bMedianValue = btable[size * size / 2];
+			rNew[width, height] = rMedianValue;
+			gNew[width, height] = gMedianValue;
+			bNew[width, height] = bMedianValue;
+		}
+
+		private void medianButton5x5_Click(object sender, RoutedEventArgs e) {
+
+			rNew = new int[img.Width, img.Height];
+			gNew = new int[img.Width, img.Height];
+			bNew = new int[img.Width, img.Height];
+
+			for (int i = 0; i < img.Width; i++) {
+				for (int j = 0; j < img.Height; j++) {
+					System.Drawing.Color color = img.GetPixel(i, j);
+					r[i, j] = color.R;
+					g[i, j] = color.G;
+					b[i, j] = color.B;
+				}
+			}
+
+			for (int i = 0; i < img.Width; i++) {
+				for (int j = 0; j < img.Height; j++) {
+					medianFilter(i, j, 5);
+				}
+			}
+
+			for (int i = 0; i < img.Width; i++) {
+				for (int j = 0; j < img.Height; j++) {
+					img.SetPixel(i, j, System.Drawing.Color.FromArgb(rNew[i, j], gNew[i, j], bNew[i, j]));
+				}
+			}
+			image.Source = BitmapToImageSource(img);
+		}
 	}
 
 

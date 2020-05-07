@@ -107,7 +107,8 @@
 
             <Button x:Name="kuwaharaButton" Content="Kuwahara" Padding="10" Margin="0, 0, 10, 0" Click="kuwaharaButton_Click"/>
 
-            <Button x:Name="medianButton" Content="Median" Padding="10"/>
+            <Button x:Name="medianButton3x3" Content="Median 3x3" Padding="10"  Margin="0, 0, 10, 0" Click="medianButton3x3_Click"/>
+            <Button x:Name="medianButton5x5" Content="Median 5x5" Padding="10" Click="medianButton5x5_Click"/>
         </StackPanel>
 
         <TextBlock x:Name="labelOriginal" Grid.Row="4" Grid.Column="1" Text="Original image" HorizontalAlignment="Center" VerticalAlignment="Center"/>
